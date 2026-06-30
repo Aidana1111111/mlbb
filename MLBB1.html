@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MLBB Esports Hub</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+
+        /* --- Custom Scrollbar --- */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #09010f;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #6d28d9;
+            border-radius: 5px;
+        }
+        body.light ::webkit-scrollbar-track {
+            background: #fff0f5;
+        }
+        body.light ::webkit-scrollbar-thumb {
+            background: #db2777;
+        }
+
+        /* --- DARK PURPLE THEME (Default) --- */
+        body {
+            background: #09010f;
+            color: white;
+            transition: background 0.4s, color 0.4s;
+            overflow-x: hidden;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 18px 8%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(15, 0, 30, 0.85);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.4);
+            z-index: 999;
+            transition: 0.4s;
+        }
+
+        .logo {
+            font-size: 30px;
+            font-weight: 700;
+            color: #b266ff;
+            text-shadow: 0 0 15px #b266ff;
+            transition: 0.4s;
+            cursor: pointer;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: white;
+            margin-left: 25px;
+            font-weight: 600;
+            transition: .3s;
+            position: relative;
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #b266ff;
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after {
+            width: 100%;
+        }
+
+        nav a:hover {
+            color: #b266ff;
+        }
+
+        #themeBtn {
+            margin-left: 25px;
+            padding: 10px 22px;
+            border: none;
+            border-radius: 30px;
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: .3s;
+            box-shadow: 0 4px 15px rgba(139, 92, 246, 0.4);
+        }
+
+        #themeBtn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 25px #a855f7;
+        }
+
+        .hero {
+            height: 65vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(5, 0, 15, 0.85), rgba(5, 0, 20, 0.95)),
+            url("https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80");
+            background-size: cover;
+            background-position: center;
+            padding-top: 100px;
+        }
+
+        .hero h1 {
+            font-size: 55px;
+            color: #d8b4fe;
+            text-shadow: 0 0 25px #9333ea;
+            animation: pulse 3s infinite alternate;
+        }
+
+        @keyframes pulse {
+            0% { text-shadow: 0 0 15px #9333ea; }
+            100% { text-shadow: 0 0 35px #c084fc; }
+        }
+
+        .hero p {
+            margin-top: 20px;
+            font-size: 20px;
+            color: #ddd;
+            max-width: 700px;
+        }
+
+        .search {
+            margin-top: 35px;
+            width: 450px;
+            max-width: 90%;
+            padding: 16px;
+            border-radius: 30px;
+            border: 2px solid #6d28d9;
+            font-size: 17px;
+            outline: none;
+            background: rgba(23, 12, 36, 0.8);
+            color: white;
+            text-align: center;
+            transition: 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .search:focus {
+            border-color: #b266ff;
+            box-shadow: 0 0 20px rgba(178, 102, 255, 0.6);
+            width: 480px;
+        }
+
+        .search::placeholder {
+            color: #aaa;
+        }
+
+        section {
+            padding: 60px 8%;
+        }
+
+        .section-title {
+            font-size: 38px;
+            margin-bottom: 40px;
+            text-align: center;
+            color: #c084fc;
+            text-shadow: 0 0 15px #9333ea;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: rgba(23, 12, 36, 0.7);
+            border: 1px solid rgba(109, 40, 217, 0.5);
+            backdrop-filter: blur(5px);
+            padding: 25px;
+            border-radius: 20px;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s, background 0.4s;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card img {
+            width: 100%;
+            height: 190px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            transition: transform 0.3s;
+        }
+
+        .card:hover img {
+            transform: scale(1.03);
+        }
+
+        .card img.logo-img {
+            object-fit: contain;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+        }
+
+        .card h2 {
+            color: #d8b4fe;
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .card p {
+            line-height: 1.6;
+            color: #ddd;
+            font-size: 15px;
+            margin-bottom: 4px;
+        }
+
+        .view-btn {
+            margin-top: 18px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: .3s;
+            box-shadow: 0 4px 12px rgba(109, 40, 217, 0.3);
+        }
+
+        .view-btn:hover {
+            background: linear-gradient(135deg, #a855f7, #8b5cf6);
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.6);
+        }
+
+        .live-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #ef4444;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            box-shadow: 0 0 10px #ef4444;
+        }
+
+        .live-dot {
+            width: 7px;
+            height: 7px;
+            background: white;
+            border-radius: 50%;
+            animation: blink 1s infinite alternate;
+        }
+
+        @keyframes blink {
+            0% { opacity: 0.2; }
+            100% { opacity: 1; }
+        }
+
+        /* --- 🤖 AI ASSISTANT CHAT INTERFACE --- */
+        #aiChatContainer {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        #aiToggleBtn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            color: white;
+            font-size: 26px;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(139, 92, 246, 0.6);
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #aiToggleBtn:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        #aiChatBox {
+            width: 350px;
+            height: 450px;
+            background: #13091f;
+            border: 2px solid #8b5cf6;
+            border-radius: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            transition: 0.3s;
+        }
+
+        .ai-header {
+            background: linear-gradient(135deg, #8b5cf6, #6d28d9);
+            padding: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-messages {
+            flex: 1;
+            padding: 15px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .msg {
+            max-width: 80%;
+            padding: 10px 14px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 1.4;
+            word-wrap: break-word;
+        }
+
+        .msg.bot {
+            background: #23153c;
+            color: #d8b4fe;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .msg.user {
+            background: #8b5cf6;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+        }
+
+        .ai-input-area {
+            display: flex;
+            padding: 10px;
+            background: #09010f;
+            border-top: 1px solid #23153c;
+        }
+
+        .ai-input-area input {
+            flex: 1;
+            padding: 10px 15px;
+            background: #170c24;
+            border: 1px solid #6d28d9;
+            color: white;
+            border-radius: 20px;
+            outline: none;
+            font-size: 14px;
+        }
+
+        .ai-send-btn {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 0 15px;
+            margin-left: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        footer {
+            background: #12061d;
+            padding: 40px 20px;
+            text-align: center;
+            color: #999;
+            margin-top: 70px;
+            border-top: 1px solid #6d28d9;
+        }
+
+        /* --- PINK & WHITE THEME (.light) --- */
+        body.light {
+            background: #fff0f5;
+            color: #331a38;
+        }
+
+        body.light header {
+            background: rgba(255, 230, 240, 0.9);
+            box-shadow: 0 4px 20px rgba(219, 39, 119, 0.3);
+        }
+
+        body.light .logo {
+            color: #db2777;
+            text-shadow: 0 0 10px #f472b6;
+        }
+
+        body.light nav a {
+            color: #4c1d95;
+        }
+
+        body.light nav a::after {
+            background-color: #db2777;
+        }
+
+        body.light nav a:hover {
+            color: #db2777;
+        }
+
+        body.light #themeBtn {
+            background: linear-gradient(135deg, #db2777, #ec4899);
+            box-shadow: 0 4px 15px rgba(219, 39, 119, 0.3);
+        }
+
+        body.light .hero {
+            background: linear-gradient(rgba(255, 240, 245, 0.85), rgba(255, 220, 235, 0.95)),
+            url("https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=1600&q=80");
+        }
+
+        body.light .hero h1 {
+            color: #db2777;
+            text-shadow: 0 0 15px #f472b6;
+        }
+
+        body.light .hero p {
+            color: #554455;
+        }
+
+        body.light .search {
+            background: white;
+            color: #333;
+            border: 2px solid #f472b6;
+            box-shadow: 0 4px 15px rgba(219, 39, 119, 0.1);
+        }
+
+        body.light .search:focus {
+            border-color: #db2777;
+            box-shadow: 0 0 20px rgba(219, 39, 119, 0.4);
+        }
+
+        body.light .section-title {
+            color: #db2777;
+            text-shadow: 0 0 10px #f472b6;
+        }
+
+        body.light .card {
+            background: white;
+            border: 1px solid #fbcfe8;
+            box-shadow: 0 5px 15px rgba(219, 39, 119, 0.08);
+        }
+
+        body.light .card:hover {
+            box-shadow: 0 10px 25px rgba(219, 39, 119, 0.3);
+            background: #fff5f8;
+        }
+
+        body.light .card h2 {
+            color: #db2777;
+        }
+
+        body.light .card p {
+            color: #554455;
+        }
+
+        body.light .view-btn {
+            background: linear-gradient(135deg, #db2777, #ec4899);
+        }
+
+        body.light .view-btn:hover {
+            background: linear-gradient(135deg, #ec4899, #f472b6);
+            box-shadow: 0 4px 15px rgba(236, 72, 153, 0.5);
+        }
+
+        /* Светлые стили для ИИ чата */
+        body.light #aiToggleBtn {
+            background: linear-gradient(135deg, #db2777, #ec4899);
+            box-shadow: 0 4px 20px rgba(219, 39, 119, 0.5);
+        }
+
+        body.light #aiChatBox {
+            background: #ffffff;
+            border: 2px solid #db2777;
+            box-shadow: 0 10px 30px rgba(219, 39, 119, 0.2);
+        }
+
+        body.light .ai-header {
+            background: linear-gradient(135deg, #db2777, #ec4899);
+        }
+
+        body.light .msg.bot {
+            background: #ffe4e1;
+            color: #8b008b;
+        }
+
+        body.light .msg.user {
+            background: #db2777;
+            color: white;
+        }
+
+        body.light .ai-input-area {
+            background: #fff0f5;
+            border-top: 1px solid #fbcfe8;
+        }
+
+        body.light .ai-input-area input {
+            background: white;
+            border: 1px solid #f472b6;
+            color: #333;
+        }
+
+        body.light .ai-send-btn {
+            background: #db2777;
+        }
+
+        body.light footer {
+            background: #fce7f3;
+            color: #754a60;
+            border-top: 1px solid #fbcfe8;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <div class="logo" onclick="window.scrollTo(0,0)">🎮 MLBB HUB</div>
+    <nav>
+        <a href="#home">Home</a>
+        <a href="#teams">Teams</a>
+        <a href="#players">Players</a>
+        <a href="#tournaments">Tournaments</a>
+        <a href="#news">News</a>
+        <a href="#meta">Meta</a>
+        <button id="themeBtn">🌙 Theme</button>
+    </nav>
+</header>
+
+<section class="hero" id="home">
+    <h1>MLBB ESPORTS HUB</h1>
+    <p>Discover professional Mobile Legends teams, players, tournaments and the latest esports news.</p>
+    <input type="text" id="search" class="search" placeholder="Type to search (e.g., Kairi, ONIC, Assassin)...">
+</section>
+
+<!-- TEAMS SECTION -->
+<section id="teams">
+    <h2 class="section-title">Top Teams</h2>
+    <div class="grid">
+        <div class="card">
+            <img class="logo-img" src="https://liquipedia.net/commons/images/d/da/ONIC_Esports_allmode.png" alt="ONIC">
+            <div>
+                <h2>ONIC Esports</h2>
+                <p>Country: Indonesia 🇮🇩</p>
+                <p>Founded: 2018</p>
+                <p>Win Rate: 83%</p>
+            </div>
+            <a class="view-btn" href="https://liquipedia.net/mobilelegends/ONIC_Esports" target="_blank">View Team</a>
+        </div>
+
+        <div class="card">
+            <img class="logo-img" src="https://liquipedia.net/commons/images/thumb/b/bb/Team_Liquid_Echo_full_lightmode.png/900px-Team_Liquid_Echo_full_lightmode.png" alt="Liquid">
+            <div>
+                <h2>Team Liquid PH</h2>
+                <p>Country: Philippines 🇵🇭</p>
+                <p>Status: World Champions</p>
+                <p>Win Rate: 81%</p>
+            </div>
+            <a class="view-btn" href="https://liquipedia.net/mobilelegends/Team_Liquid_PH" target="_blank">View Team</a>
+        </div>
+
+        <div class="card">
+            <img class="logo-img" src="https://liquipedia.net/commons/images/thumb/1/1e/Rex_Regum_Qeon_allmode.png/281px-Rex_Regum_Qeon_allmode.png" alt="RRQ">
+            <div>
+                <h2>RRQ Hoshi</h2>
+                <p>Country: Indonesia 🇮🇩</p>
+                <p>Status: MPL Champions</p>
+                <p>Win Rate: 79%</p>
+            </div>
+            <a class="view-btn" href="https://liquipedia.net/mobilelegends/RRQ_Hoshi" target="_blank">View Team</a>
+        </div>
+
+        <div class="card">
+            <img class="logo-img" src="https://liquipedia.net/commons/images/8/83/Team_Falcons_2022_allmode.png" alt="Falcons">
+            <div>
+                <h2>Team Falcons</h2>
+                <p>Country: International 🌍</p>
+                <p>Status: MSC Champions</p>
+                <p>Win Rate: 82%</p>
+            </div>
+            <a class="view-btn" href="https://liquipedia.net/mobilelegends/Team_Falcons" target="_blank">View Team</a>
+        </div>
+    </div>
+</section>
+
+<!-- PLAYERS SECTION -->
+<section id="players">
+    <h2 class="section-title">Top Players</h2>
+    <div class="grid">
+        <div class="card">
+            <img src="https://liquipedia.net/commons/images/4/49/ONIC_Kairi_S17.png" alt="Kairi">
+            <div>
+                <h2>Kairi</h2>
+                <p>Team: ONIC Esports</p>
+                <p>Role: Jungler</p>
+                <p>Nationality: Philippines 🇵🇭</p>
+            </div>
+            <a class="view-btn" href="https://liquipedia.net/mobilelegends/Kairi" target="_blank">Player Profile</a>
+        </div>
+        <div class="card">
+            <img src="https://liquipedia.net/commons/images/d/dd/ONIC_Sanz_S17.png" alt="Sanz">
+            <div>
+                <h2>Sanz</h2>
+                <p>Team: ONIC Esports</p>
+                <p>Role: Mid Lane</p>
+                <p>Nationality: Indonesia 🇮🇩</p>
+            </div>
+            <a class="view-btn" href="https://liquipedia.net/mobilelegends/Sanz" target="_blank">Player Profile</a>
+        </div>
+        <div class="card">
+            <img src="https://liquipedia.net/commons/images/2/22/TLPH_KarlTzy_S17.png" alt="KarlTzy">
+            <div>
+                <h2>KarlTzy</h2>
+                <p>Team: Team Liquid PH</p>
+                <p>Role: Jungler</p>
+                <p>Nationality: Philippines 🇵🇭</p>
+            </div>
+            <a class="view-btn" href="https://liquipedia.net/mobilelegends/KarlTzy" target="_blank">Player Profile</a>
+        </div>
+        <div class="card">
+            <img src="https://liquipedia.net/commons/images/1/19/ONIC_Kiboy_S17.png" alt="Kiboy">
+            <div>
+                <h2>Kiboy</h2>
+                <p>Team: ONIC Esports</p>
+                <p>Role: Roamer</p>
+                <p>Nationality: Indonesia 🇮🇩</p>
+            </div>
+            <a class="view-btn" href="https://liquipedia.net/mobilelegends/Kiboy" target="_blank">Player Profile</a>
+        </div>
+    </div>
+</section>
+
+<!-- TOURNAMENTS SECTION -->
+<section id="tournaments">
+    <h2 class="section-title">World Championships</h2>
+    <div class="grid">
+        <div class="card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLnz2nJCL9CW58QHk3AROQ-YjelKvtaJxwqzrVTLx2-A&s=10" class="logo-img" alt="M1">
+            <div>
+                <h2>M1 Championship</h2>
+                <p>Year: 2019</p>
+                <p>Location: Malaysia 🇲🇾</p>
+            </div>
+            <a class="view-btn" href="https://liquipedia.net/mobilelegends/M_World_Championship/1" target="_blank">Tournament Page</a>
+        </div>
+        <div class="card">
+            <img src="https://liquipedia.net/commons/images/thumb/9/9b/M2_World_allmode.png/600px-M2_World_allmode.png" class="logo-img" alt="M2">
+            <div>
+                <h2>M2 Championship</h2>
+                <p>Year: 2021</p>
+                <p>Location: Singapore 🇸🇬</p>
+            </div>
+            <a class="view-btn" href="https://liquipedia.net/mobilelegends/M_World_Championship/2" target="_blank">Tournament Page</a>
+        </div>
+        <div class="card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSch4nTT9aatpOQnbZY__p5EZl3N_s8yaLXcaLBXwZk9Q&s" class="logo-img" alt="M3">
+            <div>
+                <h2>M3 Championship</h2>
+                <p>Year: 2021</p>
+                <p>Location: Singapore 🇸🇬</p>
+            </div>
+            <a class="view-btn" href="https://en.wikipedia.org/wiki/MLBB_M3_World_Championship" target="_blank">Tournament Page</a>
+        </div>
+        <div class="card">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpQMqzB8sqlJZHRHUK1G8xNwC5f2TCBEbh8oKa7VIeTw&s=10" class="logo-img" alt="M4">
+            <div>
+                <h2>M4 Championship</h2>
+                <p>Year: 2023</p>
+                <p>Location: Indonesia 🇮🇩</p>
+            </div>
+            <a class="view-btn" href="https://liquipedia.net/mobilelegends/M4_World_Championship" target="_blank">Tournament Page</a>
+        </div>
+    </div>
+</section>
+
+<!-- NEWS SECTION -->
+<section id="news">
+    <h2 class="section-title">Latest News</h2>
+    <div class="grid">
+        <div class="card">
+            <div class="live-badge"><div class="live-dot"></div>LIVE</div>
+            <img src="https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=500&q=80" alt="Season Update">
+            <div>
+                <h2>Season Update</h2>
+                <p>The new MLBB ranked competitive season has officially started.</p>
+            </div>
+            <a class="view-btn" href="https://m.mobilelegends.com" target="_blank">Read Article</a>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?auto=format&fit=crop&w=500&q=80" alt="Patch Update">
+            <div>
+                <h2>Patch Update</h2>
+                <p>Several pro-meta heroes received massive balancing adjustments.</p>
+            </div>
+            <a class="view-btn" href="https://m.mobilelegends.com" target="_blank">Read Patch Notes</a>
+        </div>
+        <div class="card">
+            <img src="https://images.unsplash.com/photo-1560253023-3ec5d502959f?auto=format&fit=crop&w=500&q=80" alt="MPL Leagues">
+            <div>
+                <h2>MPL Esports News</h2>
+                <p>Professional regional leagues continue running worldwide.</p>
+            </div>
+            <a class="view-btn" href="https://ph-mpl.com/" target="_blank">View Leagues</a>
+        </div>
+    </div>
+</section>
+
+<!-- META HEROES SECTION -->
+<section id="meta">
+    <h2 class="section-title">Meta Heroes</h2>
+    <div class="grid">
+        <div class="card">
+            <img src="https://static.wikia.nocookie.net/mobile-legends/images/3/35/Hero211-portrait.png/revision/latest?cb=20241021141115" alt="Hayabusa">
+            <div>
+                <h2>Hayabusa</h2>
+                <p>Role: Assassin</p>
+                <p>Win Rate: 55%</p>
+            </div>
+            <a class="view-btn" href="https://mobile-legends.fandom.com/wiki/Hayabusa" target="_blank">Wiki Guide</a>
+        </div>
+        <div class="card">
+            <img src="https://static.wikia.nocookie.net/mobile-legends/images/f/fb/Hero1181-portrait.png/revision/latest?cb=20241021140707" alt="Joy">
+            <div>
+                <h2>Joy</h2>
+                <p>Role: Assassin</p>
+                <p>Win Rate: 54%</p>
+            </div>
+            <a class="view-btn" href="https://mobile-legends.fandom.com/wiki/Joy" target="_blank">Wiki Guide</a>
+        </div>
+        <div class="card">
+            <img src="https://static.wikia.nocookie.net/mobile-legends/images/b/b0/Hero1271-portrait.png/revision/latest?cb=20250412174341" alt="Lukas">
+            <div>
+                <h2>Lukas</h2>
+                <p>Role: Fighter</p>
+                <p>Win Rate: 56%</p>
+            </div>
+            <a class="view-btn" href="https://mobile-legends.fandom.com/wiki/Lukas" target="_blank">Wiki Guide</a>
+        </div>
+        <div class="card">
+            <img src="https://static.wikia.nocookie.net/mobile-legends/images/9/9f/Hero1251-portrait.png/revision/latest?cb=20250406000833" alt="Zhuxin">
+            <div>
+                <h2>Zhuxin</h2>
+                <p>Role: Mage</p>
+                <p>Win Rate: 53%</p>
+            </div>
+            <a class="view-btn" href="https://mobile-legends.fandom.com/wiki/Zhuxin" target="_blank">Wiki Guide</a>
+        </div>
+    </div>
+</section>
+
+<!-- 🤖 AI ASSISTANT WIDGET HTML -->
+<div id="aiChatContainer">
+    <div id="aiChatBox">
+        <div class="ai-header">
+            <span>🤖 MLBB AI Coach</span>
+            <span style="cursor:pointer;" onclick="toggleChat()">✕</span>
+        </div>
+        <div class="ai-messages" id="aiMessages">
+            <div class="msg bot">Hello 🔥</div>
+        </div>
+        <div class="ai-input-area">
+            <input type="text" id="aiInputField" placeholder="Write your question..." onkeypress="handleKeyPress(event)">
+            <button class="ai-send-btn" onclick="sendAiMessage()">➔</button>
+        </div>
+    </div>
+    <button id="aiToggleBtn" onclick="toggleChat()">💬</button>
+</div>
+
+<footer>
+    <h3>MLBB ESPORTS HUB</h3>
+    <p>Follow the best Mobile Legends professional teams, players and tournaments.</p>
+    <p>© 2026 MLBB Esports Hub</p>
+</footer>
+
+<script>
+
+    const btn = document.getElementById("themeBtn");
+    btn.onclick = function () {
+        document.body.classList.toggle("light");
+        btn.innerHTML = document.body.classList.contains("light") ? "🌸 Pink Mode" : "🌙 Dark Mode";
+    };
+
+
+    const search = document.getElementById("search");
+    const cards = document.querySelectorAll(".card");
+    search.addEventListener("input", function(){
+        const value = search.value.toLowerCase().trim();
+        cards.forEach(card => {
+            card.style.display = card.innerText.toLowerCase().includes(value) ? "flex" : "none";
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", () => {
+        cards.forEach((card, index) => {
+            setTimeout(() => {
+                card.style.transition = "transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s, opacity 0.6s ease";
+                card.style.opacity = "1";
+                card.style.transform = "translateY(0)";
+            }, index * 50);
+        });
+    });
+
+    const chatBox = document.getElementById("aiChatBox");
+    const aiMessages = document.getElementById("aiMessages");
+    const aiInput = document.getElementById("aiInputField");
+
+    function toggleChat() {
+        chatBox.style.display = chatBox.style.display === "flex" ? "none" : "flex";
+        aiMessages.scrollTop = aiMessages.scrollHeight;
+    }
+
+    function handleKeyPress(e) {
+        if (e.key === 'Enter') sendAiMessage();
+    }
+
+    async function sendAiMessage() {
+        const query = aiInput.value.trim();
+        if (!query) return;
+
+        appendMessage(query, 'user');
+        aiInput.value = '';
+
+
+        const typingBubble = document.createElement('div');
+        typingBubble.classList.add('msg', 'bot');
+        typingBubble.innerText = "AI is thinkinq right now ⚡";
+        aiMessages.appendChild(typingBubble);
+        aiMessages.scrollTop = aiMessages.scrollHeight;
+
+        try {
+
+            const systemPrompt = "You are the top 1 coach in the game Mobile Legends (MLBB). Your task is to give clear, detailed, and professional game tips, builds, laning tactics, and counterpicks. Answer strictly in English, clearly and structured.";
+
+            const url = `https://text.pollinations.ai/${encodeURIComponent(query)}?system=${encodeURIComponent(systemPrompt)}&private=true`;
+
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('communication error');
+
+            let replyText = await response.text();
+            typingBubble.remove();
+
+
+            if(replyText.includes("you are the number one coach")) {
+                replyText = replyText.split('\n').slice(1).join('\n').trim();
+            }
+
+            appendMessage(replyText, 'bot');
+
+        } catch (error) {
+            typingBubble.remove();
+            appendMessage("Network error; please check your internet connection", "bot");
+            console.error(error);
+        }
+    }
+
+    function appendMessage(text, sender) {
+        const bubble = document.createElement('div');
+        bubble.classList.add('msg', sender);
+        bubble.innerText = text;
+        aiMessages.appendChild(bubble);
+        aiMessages.scrollTop = aiMessages.scrollHeight;
+    }
+</script>
+
+</body>
+</html>
